@@ -31,11 +31,13 @@
             this.cboDestination = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.grpInterests = new System.Windows.Forms.GroupBox();
-            this.rdoMuseums = new System.Windows.Forms.RadioButton();
-            this.rdoActivities = new System.Windows.Forms.RadioButton();
             this.rdoLandmarks = new System.Windows.Forms.RadioButton();
+            this.rdoActivities = new System.Windows.Forms.RadioButton();
+            this.rdoMuseums = new System.Windows.Forms.RadioButton();
             this.lstInterests = new System.Windows.Forms.ListBox();
             this.lblInterests = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.grpInterests.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,17 +71,17 @@
             this.grpInterests.TabStop = false;
             this.grpInterests.Text = "What are you interested in?";
             // 
-            // rdoMuseums
+            // rdoLandmarks
             // 
-            this.rdoMuseums.AutoSize = true;
-            this.rdoMuseums.Location = new System.Drawing.Point(23, 20);
-            this.rdoMuseums.Name = "rdoMuseums";
-            this.rdoMuseums.Size = new System.Drawing.Size(70, 17);
-            this.rdoMuseums.TabIndex = 0;
-            this.rdoMuseums.TabStop = true;
-            this.rdoMuseums.Text = "Museums";
-            this.rdoMuseums.UseVisualStyleBackColor = true;
-            this.rdoMuseums.CheckedChanged += new System.EventHandler(this.rdoMuseums_CheckedChanged);
+            this.rdoLandmarks.AutoSize = true;
+            this.rdoLandmarks.Location = new System.Drawing.Point(23, 68);
+            this.rdoLandmarks.Name = "rdoLandmarks";
+            this.rdoLandmarks.Size = new System.Drawing.Size(77, 17);
+            this.rdoLandmarks.TabIndex = 2;
+            this.rdoLandmarks.TabStop = true;
+            this.rdoLandmarks.Text = "Landmarks";
+            this.rdoLandmarks.UseVisualStyleBackColor = true;
+            this.rdoLandmarks.CheckedChanged += new System.EventHandler(this.rdoMuseums_CheckedChanged);
             // 
             // rdoActivities
             // 
@@ -93,17 +95,17 @@
             this.rdoActivities.UseVisualStyleBackColor = true;
             this.rdoActivities.CheckedChanged += new System.EventHandler(this.rdoMuseums_CheckedChanged);
             // 
-            // rdoLandmarks
+            // rdoMuseums
             // 
-            this.rdoLandmarks.AutoSize = true;
-            this.rdoLandmarks.Location = new System.Drawing.Point(23, 68);
-            this.rdoLandmarks.Name = "rdoLandmarks";
-            this.rdoLandmarks.Size = new System.Drawing.Size(77, 17);
-            this.rdoLandmarks.TabIndex = 2;
-            this.rdoLandmarks.TabStop = true;
-            this.rdoLandmarks.Text = "Landmarks";
-            this.rdoLandmarks.UseVisualStyleBackColor = true;
-            this.rdoLandmarks.CheckedChanged += new System.EventHandler(this.rdoMuseums_CheckedChanged);
+            this.rdoMuseums.AutoSize = true;
+            this.rdoMuseums.Location = new System.Drawing.Point(23, 20);
+            this.rdoMuseums.Name = "rdoMuseums";
+            this.rdoMuseums.Size = new System.Drawing.Size(70, 17);
+            this.rdoMuseums.TabIndex = 0;
+            this.rdoMuseums.TabStop = true;
+            this.rdoMuseums.Text = "Museums";
+            this.rdoMuseums.UseVisualStyleBackColor = true;
+            this.rdoMuseums.CheckedChanged += new System.EventHandler(this.rdoMuseums_CheckedChanged);
             // 
             // lstInterests
             // 
@@ -123,11 +125,31 @@
             this.lblInterests.TabIndex = 4;
             this.lblInterests.Text = "placeholder";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(237, 218);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(61, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "information:";
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(240, 237);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(35, 13);
+            this.lblInfo.TabIndex = 6;
+            this.lblInfo.Text = "label3";
+            // 
             // Travelguide
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(419, 422);
+            this.Controls.Add(this.lblInfo);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblInterests);
             this.Controls.Add(this.lstInterests);
             this.Controls.Add(this.grpInterests);
@@ -153,6 +175,8 @@
         private System.Windows.Forms.RadioButton rdoMuseums;
         private System.Windows.Forms.ListBox lstInterests;
         private System.Windows.Forms.Label lblInterests;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblInfo;
     }
 }
 
