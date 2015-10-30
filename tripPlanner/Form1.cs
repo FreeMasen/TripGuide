@@ -18,6 +18,8 @@ namespace tripPlanner
         }
 
         List<Location> Locations = new List<Location>();
+        Location currentLocation = new Location();
+        private interestType currentInterest;
 
         private void lstInterests_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -41,6 +43,79 @@ namespace tripPlanner
                         lblInfo.Text = place.Info;
                     
             }
+        }
+
+        private void updateListbox()
+        {
+            if (isLocation() && isInterest())
+            {
+                switch (currentInterest)
+                {
+                    case interestType.Museum:
+                        foreach (var museum in currentLocation.Museums)
+                        {
+                            lstInterests.Items.Add(museum);
+                        }
+                    break;
+                    case interestType.Activity:
+                        foreach (var activity in currentLocation.Activities)
+                        {
+                            lstInterests.Items.Add(activity);
+                        }
+                    break;
+                    case interestType.Landmark:
+                        foreach (var landmark in currentLocation.Landmarks)
+                        {
+                            lstInterests.Items.Add(landmark);
+                        }
+                    break;
+                }
+            }
+        }
+
+        private void setLocation()
+        {
+            if (cboDestination.SelectedIndex > -1)
+            {
+                currentLocation = Locations[cboDestination.SelectedIndex];
+            }
+            else
+            {
+                currentLocation = new Location();
+            }
+        }
+
+        private void setInterest()
+        {
+            foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
+            {
+                if (rdo.Checked)
+                {
+                    currentInterest = (interestType) rdo.Tag;
+                }
+            }
+        }
+
+        private bool isLocation()
+        {
+            int selected = 0;
+            foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
+            {
+                if (rdo.Checked)
+                {
+                    selected ++;
+                }
+            }
+            return true;
+        }
+
+        private bool isInterest()
+        {
+            if (!(currentInterest == interestType.none))
+            {
+                return true;
+            }
+            return false;
         }
 
         private void Travelguide_Load(object sender, EventArgs e)
@@ -96,16 +171,9 @@ namespace tripPlanner
 
         private void cboDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cboDestination.SelectedIndex > -1)
-            {
-                //Location location = Locations[cboDestination.SelectedIndex];
-                
-                //    foreach (var museum in location.museums)
-                //    {
-                //        lstInterests.Items.Add(museum);
-                //    }
-                
-            }
+            setLocation();
+            updateListbox();
+            
         }
 
         /// <summary>
@@ -113,6 +181,7 @@ namespace tripPlanner
         /// </summary>
         private void updateCBO()
         {
+            lstInterests.Items.Clear();
             foreach (var dest in Locations)
             {
                 cboDestination.Items.Add(dest.ToString());
@@ -123,47 +192,48 @@ namespace tripPlanner
         //todo this needs to be pulled out into methods
         private void rdoMuseums_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton rdo = (RadioButton)sender;
-            if (rdo.Checked)
-            {
-                switch (cboDestination.SelectedIndex)
-                {
-                    case 0:
-                        if(rdo.Text == "Museums")
-                        {
-                            Location location = Locations[cboDestination.SelectedIndex];
-                            lstInterests.Items.Clear();
-                            foreach (var museum in location.Museums)
-                            {
-                                lstInterests.Items.Add(museum);
-                            }
+            setInterest();
+            updateListbox();
+            //RadioButton rdo = (RadioButton)sender;
+            //if (rdo.Checked)
+            //{
+            //    switch (cboDestination.SelectedIndex)
+            //    {
+            //        case 0:
+            //            if(rdo.Text == "Museums")
+            //            {
+            //                Location location = Locations[cboDestination.SelectedIndex];
+            //                lstInterests.Items.Clear();
+            //                foreach (var museum in location.Museums)
+            //                {
+            //                    lstInterests.Items.Add(museum);
+            //                }
          
-                        }
-                        else if(rdo.Text == "Activities")
-                        {
-                            Location location = Locations[cboDestination.SelectedIndex];
-                            lstInterests.Items.Clear();
-                            foreach (var activity in location.Activities)
-                            {
-                                lstInterests.Items.Add(activity);
-                            }
-                        }
-                        else
-                        {
-                            Location location = Locations[cboDestination.SelectedIndex];
-                            lstInterests.Items.Clear();
-                            foreach (var landmark in location.Landmarks)
-                            {
-                                lstInterests.Items.Add(landmark);
-                            }
-                        }
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
+            //            }
+            //            else if(rdo.Text == "Activities")
+            //            {
+            //                Location location = Locations[cboDestination.SelectedIndex];
+            //                lstInterests.Items.Clear();
+            //                foreach (var activity in location.Activities)
+            //                {
+            //                    lstInterests.Items.Add(activity);
+            //                }
+            //            }
+            //            else
+            //            {
+            //                Location location = Locations[cboDestination.SelectedIndex];
+            //                lstInterests.Items.Clear();
+            //                foreach (var landmark in location.Landmarks)
+            //                {
+            //                    lstInterests.Items.Add(landmark);
+            //                }
+            //            }
+            //            break;
+            //        case 1:
+            //            break;
+            //        case 2:
+            //            break;
                 }
             }
         }
-    }
-}
+    

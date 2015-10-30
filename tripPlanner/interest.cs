@@ -32,6 +32,7 @@ namespace tripPlanner
 
     enum interestType
     {
+        none,
         Museum,
         Activity,
         Landmark
