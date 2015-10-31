@@ -17,52 +17,88 @@ namespace tripPlanner
             InitializeComponent();
         }
 
+#region Global Variables
         List<Location> Locations = new List<Location>();
         Location currentLocation = new Location();
-        private interestType currentInterest;
+        private interestType currentInterest = interestType.none;
+#endregion
 
+        #region Event Handlers
+        private void Travelguide_Load(object sender, EventArgs e)
+        {
+            rdoMuseums.Tag = interestType.Museum;
+            rdoActivities.Tag = interestType.Activity;
+            rdoLandmarks.Tag = interestType.Landmark;
+            dummyData();
+
+        }
+
+        //when the user chooes an interest
         private void lstInterests_SelectedIndexChanged(object sender, EventArgs e)
         {
             //check if the listbox selection is not nothing
             if (lstInterests.SelectedIndex > -1)
             {
-                //set the default interest type fo 0
-                interestType check = 0;
-                //loop over the selected radiobuttons in our group box that are selected
-                //this will always be 1 item
-                foreach (RadioButton rdo in grpInterests.Controls.OfType<RadioButton>().Where(t => t.Checked))
-                {
-                    //set the check variable to the tag property of the radiobutton selected
-                    //this is not currently doing anythign but might be later
-                    check = (interestType)rdo.Tag;
-                }
-                //set the variable place to the interestd located in the Museums propery list at the selected index for the list box
-                //and the location to the selected index of the cbo.  
-                //todo These would be better set as global variables? and then updated via methods
-                Interest place = Locations[cboDestination.SelectedIndex].Museums[lstInterests.SelectedIndex];
-                        lblInfo.Text = place.Info;
+                //set the label text to the info property of the interest selected in the lstbox
+                //since we added the intereest object to the lstbox we can cast the selected item to
+                //an interest object.
+                Interest place = (Interest)lstInterests.SelectedItem;
+                lblInfo.Text = place.Info;
                     
             }
         }
 
+        private void cboDestination_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            setLocation();
+            //since this method checks for both selections
+            //we can call it here and in the checked change event
+            updateListbox();
+
+        }
+
+        private void rdoMuseums_CheckedChanged(object sender, EventArgs e)
+        {
+            setInterest();
+            updateListbox();
+
+        }
+        #endregion
+
+        #region Visual Updates
+        /// <summary>
+        /// this method checks that both location and interest type are selected
+        /// it then check which type of interest is selected and loops over
+        /// the collection of interets in the selected location, adding them 
+        /// to the lstbox
+        /// </summary>
         private void updateListbox()
         {
+            //if a location and interest have been selected
             if (isLocation() && isInterest())
             {
+                //check which type of interest has been selected
                 switch (currentInterest)
                 {
+                    //if none, clear the listbox
+                    case interestType.none:
+                        lstInterests.Items.Clear();
+                        break;
+                        //if museums, add the museums to the lstbox
                     case interestType.Museum:
                         foreach (var museum in currentLocation.Museums)
                         {
                             lstInterests.Items.Add(museum);
                         }
                     break;
+                        //if activity ad the activities to the lstbox
                     case interestType.Activity:
                         foreach (var activity in currentLocation.Activities)
                         {
                             lstInterests.Items.Add(activity);
                         }
                     break;
+                        //if landmark, add the landmarks to the lstbox
                     case interestType.Landmark:
                         foreach (var landmark in currentLocation.Landmarks)
                         {
@@ -73,9 +109,28 @@ namespace tripPlanner
             }
         }
 
+
+
+        /// <summary>
+        /// this updates the options in our cbo
+        /// </summary>
+        private void updateCBO()
+        {
+            lstInterests.Items.Clear();
+            foreach (var dest in Locations)
+            {
+                cboDestination.Items.Add(dest.ToString());
+            }
+        }
+        #endregion
+
+        #region Logic
+        /// <summary>
+        /// this method sets the location to what has been selected from the combobox
+        /// </summary>
         private void setLocation()
         {
-            if (cboDestination.SelectedIndex > -1)
+            if (isLocation())
             {
                 currentLocation = Locations[cboDestination.SelectedIndex];
             }
@@ -85,71 +140,61 @@ namespace tripPlanner
             }
         }
 
+        /// <summary>
+        /// this method sets the current interest global variable
+        /// </summary>
         private void setInterest()
         {
-            foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
+            if (isInterest())
             {
-                if (rdo.Checked)
+                foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
                 {
-                    currentInterest = (interestType) rdo.Tag;
+                    if (rdo.Checked)
+                    {
+                        currentInterest = (interestType) rdo.Tag;
+                    }
                 }
             }
         }
+        #endregion
 
+#region Validation
+        /// <summary>
+        /// this method check to see if a rdo button has been checked
+        /// to define the current interest type
+        /// </summary>
+        /// <returns></returns>
         private bool isLocation()
         {
-            int selected = 0;
-            foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
-            {
-                if (rdo.Checked)
-                {
-                    selected ++;
-                }
-            }
-            return true;
-        }
-
-        private bool isInterest()
-        {
-            if (!(currentInterest == interestType.none))
+            if (cboDestination.SelectedIndex > -1)
             {
                 return true;
             }
             return false;
         }
 
-        private void Travelguide_Load(object sender, EventArgs e)
+        /// <summary>
+        /// This method checks if a radio button is seleted
+        /// </summary>
+        /// <returns></returns>
+        private bool isInterest()
         {
-            //Location Amsterdam = new Location();
-            //List<string> museum = new List<string>();
-            //List<string> activities = new List<string>();
-            //List<string> landmarks = new List<string>();
-            //Amsterdam.name = "Amsterdamn";
-
-            //museum.Add("Rijkmuseum");
-            //museum.Add("Stedelijk Museum");
-            //museum.Add("Ann Frank House");
-
-            //activities.Add("Biking");
-            //activities.Add("Gondola Riding");
-            //activities.Add("Shopping");
-
-            //landmarks.Add("Amsterdamn sign");
-            //landmarks.Add("Vist Vondelpark");
-            //landmarks.Add("Visit Hannekes Boom");
-
-            //Amsterdam.Museums = museum;
-            //Amsterdam.Activities = activities;
-            //Amsterdam.Landmarks = landmarks;
-            //Locations.Add(Amsterdam);
-            //cboDestination.Items.Add(Locations[0]);
-            //set the tags of our rdos to the options in our enum
-            rdoMuseums.Tag = interestType.Museum;
-            rdoActivities.Tag = interestType.Activity;
-            rdoLandmarks.Tag = interestType.Landmark;
-            dummyData();
-
+            int selected = 0;
+            foreach (var rdo in grpInterests.Controls.OfType<RadioButton>())
+            {
+                if (rdo.Checked)
+                {
+                    selected++;
+                }
+            }
+            if (selected <= 0)
+            {
+                return false;
+            }
+            return true;
         }
+#endregion
+        
 
         /// <summary>
         /// this holds some dummy data to play with, taken from Wikipedia/google maps
@@ -168,72 +213,8 @@ namespace tripPlanner
             Locations.Add(Amsterdam);
             updateCBO();
         }
-
-        private void cboDestination_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            setLocation();
-            updateListbox();
-            
-        }
-
-        /// <summary>
-        /// this updates the options in our cbo
-        /// </summary>
-        private void updateCBO()
-        {
-            lstInterests.Items.Clear();
-            foreach (var dest in Locations)
-            {
-                cboDestination.Items.Add(dest.ToString());
-            }
-        }
-
-        //this sets the listbox to have the correct interests
-        //todo this needs to be pulled out into methods
-        private void rdoMuseums_CheckedChanged(object sender, EventArgs e)
-        {
-            setInterest();
-            updateListbox();
-            //RadioButton rdo = (RadioButton)sender;
-            //if (rdo.Checked)
-            //{
-            //    switch (cboDestination.SelectedIndex)
-            //    {
-            //        case 0:
-            //            if(rdo.Text == "Museums")
-            //            {
-            //                Location location = Locations[cboDestination.SelectedIndex];
-            //                lstInterests.Items.Clear();
-            //                foreach (var museum in location.Museums)
-            //                {
-            //                    lstInterests.Items.Add(museum);
-            //                }
-         
-            //            }
-            //            else if(rdo.Text == "Activities")
-            //            {
-            //                Location location = Locations[cboDestination.SelectedIndex];
-            //                lstInterests.Items.Clear();
-            //                foreach (var activity in location.Activities)
-            //                {
-            //                    lstInterests.Items.Add(activity);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                Location location = Locations[cboDestination.SelectedIndex];
-            //                lstInterests.Items.Clear();
-            //                foreach (var landmark in location.Landmarks)
-            //                {
-            //                    lstInterests.Items.Add(landmark);
-            //                }
-            //            }
-            //            break;
-            //        case 1:
-            //            break;
-            //        case 2:
-            //            break;
-                }
+        
+        
             }
         }
     
