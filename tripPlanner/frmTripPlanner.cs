@@ -43,8 +43,19 @@ namespace tripPlanner
                 //since we added the intereest object to the lstbox we can cast the selected item to
                 //an interest object.
                 Interest place = (Interest)lstInterests.SelectedItem;
-                lblInfo.Text = place.Info;
-                    
+                StringBuilder sb = new StringBuilder();
+                StringBuilder ln = new StringBuilder();
+
+                foreach (var letter in place.Info)
+                {
+                    ln.Append(letter);
+                    if ((ln.Length > 20) && letter == ' ')
+                    {
+                        sb.AppendLine(ln.ToString());
+                        ln.Clear();
+                    }
+                }
+                lblInfo.Text = sb.ToString();     
             }
         }
 
@@ -77,12 +88,14 @@ namespace tripPlanner
             //if a location and interest have been selected
             if (isLocation() && isInterest())
             {
+                lstInterests.Items.Clear();
                 //check which type of interest has been selected
                 switch (currentInterest)
                 {
                     //if none, clear the listbox
                     case interestType.none:
                         lstInterests.Items.Clear();
+                        lblInterests.Text = "";
                         break;
                         //if museums, add the museums to the lstbox
                     case interestType.Museum:
@@ -90,6 +103,7 @@ namespace tripPlanner
                         {
                             lstInterests.Items.Add(museum);
                         }
+                        lblInterests.Text = "Museums";
                     break;
                         //if activity ad the activities to the lstbox
                     case interestType.Activity:
@@ -97,6 +111,7 @@ namespace tripPlanner
                         {
                             lstInterests.Items.Add(activity);
                         }
+                        lblInterests.Text = "Activities";
                     break;
                         //if landmark, add the landmarks to the lstbox
                     case interestType.Landmark:
@@ -104,6 +119,7 @@ namespace tripPlanner
                         {
                             lstInterests.Items.Add(landmark);
                         }
+                        lblInterests.Text = "Landmarks";
                     break;
                 }
             }
@@ -202,14 +218,30 @@ namespace tripPlanner
         private void dummyData()
         {
             Interest Rij = new Interest("Rijkmuseum", "The Rijksmuseum is a Netherlands national museum dedicated to arts and history in Amsterdam. The museum is located at the Museum Square in the borough Amsterdam South.", interestType.Museum);
-            Interest stedInterest = new Interest("Stedelijk Museum", "", interestType.Museum);
-            Interest AnnFrank = new Interest("Ann Frank House", "", interestType.Museum);
-            List<Interest> amst = new List<Interest>();
-            amst.Add(Rij);
-            amst.Add(stedInterest);
-            amst.Add(AnnFrank);
+            Interest stedInterest = new Interest("Stedelijk Museum", "The Stedelijk Museum Amsterdam is an international museum dedicated to modern and contemporary art and design. - See more at: http://www.stedelijk.nl/en#sthash.dzaEBA4u.dpuf", interestType.Museum);
+            Interest AnnFrank = new Interest("Ann Frank House", "The Anne Frank House (Dutch: Anne Frank Huis) is a historic house and biographical museum dedicated to Jewish wartime diarist Anne Frank. The building is located at the Prinsengracht, close to the Westerkerk, in central Amsterdam in the Netherlands.", interestType.Museum);
+            List<Interest> mues = new List<Interest>();
+            mues.Add(Rij);
+            mues.Add(stedInterest);
+            mues.Add(AnnFrank);
 
-            Location Amsterdam = new Location("Amsterdam",amst, amst, amst);
+            Interest bike = new Interest("Ride a bike", "Do as the locals do, and grab a set of wheels for an active bicycle tour around Amsterdam. ", interestType.Activity);
+            Interest boat = new Interest("Take a boat tour", "Experiencing Amsterdam from the water is one of the best ways to get to know the city", interestType.Activity);
+            Interest walking = new Interest("Walking", "Hit the streets and get walking - the best way to see Amsterdam", interestType.Activity);
+            List<Interest> act = new List<Interest>();
+            act.Add(bike);
+            act.Add(boat);
+            act.Add(walking);
+
+            Interest sign = new Interest("The I Amsterdam sign", "The large I amsterdam slogan quickly became a city icon and a much sought-after photo opportunity. Visitors photograph themselves, in, around and on top of the slogan, and it always manages to inspire the novice photographer.", interestType.Landmark);
+            Interest Damsq = new Interest("Dam square", "The Dam is the very centre and heart of the city, and is the center of Amsterdam attractions.", interestType.Landmark);
+            Interest Vondelpark = new Interest("Vonderlpark", "ondelpark is the largest city park in Amsterdam, and certainly the most famous park in the Netherlands, which welcomes about 10 million visitors every year.", interestType.Landmark);
+            List<Interest> lndmrk = new List<Interest>();
+            lndmrk.Add(sign);
+            lndmrk.Add(Damsq);
+            lndmrk.Add(Vondelpark);
+
+            Location Amsterdam = new Location("Amsterdam",mues, act, lndmrk);
             Locations.Add(Amsterdam);
             updateCBO();
         }
